@@ -57,6 +57,4 @@ files.concat
     aliases[`${file.key}`] = file.value;
   });
 
-console.log(aliases);
-
 module.exports = aliases;

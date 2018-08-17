@@ -1,21 +1,30 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="container">
+      <div class="tile is-ancestor">
+        <div class="tile is-4">
+          <github></github>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from 'AppComponentsGithub';
+// eslint-disable-next-line
+import Github from 'AppComponentsGithub';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
+    Github,
   },
 };
 </script>
 
 <style lang="scss">
+@import '~bulma/bulma';
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
