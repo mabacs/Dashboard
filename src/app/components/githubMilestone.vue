@@ -2,7 +2,7 @@
     <div class="card" style="width: 100%">
       <header class="card-header">
         <p class="card-header-title">
-          {{ projectName }}
+          {{ projectName }} / {{ milestoneName }}
         </p>
 
         <a href="#" class="card-header-icon">
@@ -16,15 +16,16 @@
 
       <div class="card-content">
         <div class="content">
-          <div class="tags has-addons">
-            <span class="tag is-dark is-small">
-              <font-awesome-icon icon="star" class="star-icon" />
-            </span>
-            <span class="tag is-dark" v-text="projectStarts"></span>
-          </div>
-          <p style="text-align: left">Subscribers: {{ projectSubscribers }}</p>
-          <p style="text-align: left">Opened Issues: {{ projectIssues }}</p>
-          <p style="text-align: left">Opened Pull Requests: {{ prQuantity }}</p>
+          <p style="text-align: left">Description: {{ milestoneDescription }} </p>
+
+          <p style="text-align: left">Opened Issues: {{ milestoneIssuesOpened }}</p>
+
+          <p style="text-align: left">Closed Issues: {{ milestoneIssuesClosed }}</p>
+
+          <p style="text-align: left"> Milestone Progress:
+            <progress class="progress is-success" :value="milestoneProgress" max="100">60%</progress>
+          </p>
+
         </div>
       </div>
     </div>
@@ -37,15 +38,16 @@ export default {
   data: () => ({
     projectPath: 'https://api.github.com/repos/mabacs/Dashboard?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
     projectName: '',
-    projectIssues: 0,
-    projectStarts: 0,
-    projectSubscribers: 0,
 
     repoPath: 'https://api.github.com/orgs/mabacs?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
     imgRepoUrl: '',
 
-    prPath: 'https://api.github.com/repos/mabacs/Dashboard/pulls?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
-    prQuantity: 0,
+    milestonePath: 'https://api.github.com/repos/mabacs/Dashboard/milestones?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
+    milestoneName: '',
+    milestoneDescription: '',
+    milestoneIssuesClosed: 0,
+    milestoneProgress: 0,
+
   }),
 
   mounted() {
@@ -53,8 +55,6 @@ export default {
       .then((res) => {
         this.projectName = res.data.name;
         this.projectIssues = res.data.open_issues_count;
-        this.projectStarts = res.data.stargazers_count;
-        this.projectSubscribers = res.data.subscribers_count;
       });
 
     axios.get(this.repoPath)
@@ -66,9 +66,17 @@ export default {
       .then((res) => {
         this.prQuantity = res.data.length;
       });
+
+    axios.get(this.milestonePath)
+      .then((res) => {
+        this.milestoneName = res.data[0].title;
+        this.milestoneIssuesOpened = res.data[0].open_issues;
+        this.milestoneIssuesClosed = res.data[0].closed_issues;
+        const total = this.milestoneIssuesOpened + this.milestoneIssuesClosed;
+        this.milestoneProgress = (this.milestoneIssuesClosed / total) * 100;
+        this.milestoneDescription = res.data[0].description;
+      });
   },
 };
 </script>
 
-<style lang="scss">
-</style>

@@ -2,8 +2,12 @@
   <div id="app">
     <div class="container">
       <div class="tile is-ancestor">
-        <div class="tile is-4">
+        <div class="tile is-3">
           <github></github>
+        </div>
+
+        <div class="tile is-4" style="padding-left: 50px">
+          <github-milestone></github-milestone>
         </div>
       </div>
     </div>
@@ -13,11 +17,14 @@
 <script>
 // eslint-disable-next-line
 import Github from 'AppComponentsGithub';
+// eslint-disable-next-line
+import GithubMilestone from 'AppComponentsGithubMilestone';
 
 export default {
   name: 'app',
   components: {
     Github,
+    GithubMilestone,
   },
 };
 </script>
