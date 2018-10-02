@@ -45,6 +45,7 @@ export default {
     milestonePath: 'https://api.github.com/repos/mabacs/Dashboard/milestones?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
     milestoneName: '',
     milestoneDescription: '',
+    milestoneIssuesOpened: 0,
     milestoneIssuesClosed: 0,
     milestoneProgress: 0,
 

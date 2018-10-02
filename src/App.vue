@@ -6,8 +6,12 @@
           <github></github>
         </div>
 
-        <div class="tile is-4" style="padding-left: 50px">
+        <div class="tile is-4" style="padding-left: 50px;">
           <github-milestone></github-milestone>
+        </div>
+
+        <div class="tile" style="padding-left: 50px;">
+          <slack></slack>
         </div>
       </div>
     </div>
@@ -19,12 +23,15 @@
 import Github from 'AppComponentsGithub';
 // eslint-disable-next-line
 import GithubMilestone from 'AppComponentsGithubMilestone';
+// eslint-disable-next-line
+import Slack from 'AppComponentsSlack';
 
 export default {
   name: 'app',
   components: {
     Github,
     GithubMilestone,
+    Slack,
   },
 };
 </script>
