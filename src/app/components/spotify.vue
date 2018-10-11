@@ -87,7 +87,6 @@ export default {
                     console.error('User is not playing music through the Web Playback SDK');
                     return;
                 }
-                console.log('current: ', state.track_window.current_track);
 
                 this.currentTrack = state.track_window.current_track;
                 this.imgRepoUrl = this.currentTrack.album.images[0].url;
