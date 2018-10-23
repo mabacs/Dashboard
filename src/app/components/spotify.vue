@@ -10,12 +10,16 @@
             <div class="content">
                 <div>
                     <button
-                        v-if="!connected"
+                        v-if="!connected && !waitDevice"
                         class="btnConnect"
                         v-text="'Connect'"
                         @click="spotifyRequest()"
                     >
                     </button>
+                </div>
+
+                <div v-if="waitDevice && !connected">
+                    Waiting for Device Connection
                 </div>
 
                 <div
@@ -40,11 +44,11 @@
 
                                 <a
                                     class="button clickbtn"
-                                    @click="pauseMusic()"
+                                    @click="playMusic()"
                                 >
                                     <span class="icon">
                                         <!-- <i class="far fa-pause-circle" style="color: #fff;"></i> -->
-                                        <i class="fas fa-play-circle" style="color: #fff; font-size:30px;"></i>
+                                        <i :class="changeButton()" style="color: #fff; font-size:30px;"></i>
                                     </span>
                                 </a>
                                 <a
@@ -74,13 +78,20 @@
 export default {
 
     data: () => ({
-        spotifyPath: 'http://localhost:4392/spotify/token',
         currentTrack: '',
         connected: false,
+        waitDevice: false,
         imgRepoUrl: '',
+        play: false,
     }),
 
     methods: {
+        changeButton() {
+            return this.play
+                ? 'far fa-pause-circle'
+                : 'fas fa-play-circle';
+        },
+
         getCurrent() {
             this.player.getCurrentState().then(state => {
                 if (! state) {
@@ -88,29 +99,27 @@ export default {
                     return;
                 }
 
-                this.currentTrack = state.track_window.current_track;
+                // this.currentTrack = state.track_window.current_track;
                 this.imgRepoUrl = this.currentTrack.album.images[0].url;
             });
         },
 
-        pauseMusic() {
+        playMusic() {
             this.player.togglePlay().then(() => {
+                this.play = ! this.play;
                 this.getCurrent();
-                console.log('paused');
             });
         },
 
         nextMusic() {
             this.player.nextTrack().then(() => {
                 this.getCurrent();
-                console.log('nextTrack');
             });
         },
 
         previousMusic() {
             this.player.previousTrack().then(() => {
                 this.getCurrent();
-                console.log('previousTrack');
             });
         },
 
@@ -131,7 +140,7 @@ export default {
         },
 
         spotifyRequest() {
-            const win = window.open('https://accounts.spotify.com/authorize/?client_id=b35dda2c6d8844eb9ca34c7b405ef4d5&response_type=code&redirect_uri=http://localhost:4392/spotify/token&scope=streaming%20user-read-birthdate%20user-read-private%20user-read-email');
+            const win = window.open('https://accounts.spotify.com/authorize/?client_id=b35dda2c6d8844eb9ca34c7b405ef4d5&response_type=code&redirect_uri=http://barbatheus.dashboard.com:4392/spotify/token&scope=streaming%20user-read-birthdate%20user-read-private%20user-read-email');
             const winClosed = setInterval(() => {
                 if (win.closed) {
                     clearInterval(winClosed);
@@ -154,7 +163,6 @@ export default {
                     console.error(message);
                 });
                 this.player.addListener('authentication_error', ({ message }) => {
-                    console.log('auth error');
                     console.error(message);
                 });
                 this.player.addListener('account_error', ({ message }) => {
@@ -165,13 +173,19 @@ export default {
                 });
 
                 // Playback status updates
-                this.player.addListener('player_state_changed', () => {
-                    console.log('player_state_changed');
+                this.player.addListener('player_state_changed', ({
+                    track_window: { current_track },
+                }) => {
+                    this.connected = true;
+                    this.currentTrack = current_track;
+                    this.getCurrent();
                 });
 
                 // Ready
                 this.player.addListener('ready', ({ deviceId }) => {
-                    console.log('Ready with Device ID', deviceId);
+                    if (deviceId === undefined) {
+                        this.waitDevice = true;
+                    }
                 });
 
                 // Not Ready
@@ -180,10 +194,11 @@ export default {
                 });
 
                 this.player.connect();
-                this.getCurrent();
+                if (this.connected && (! this.waitDevice)) {
+                    this.getCurrent();
+                }
             };
 
-            this.connected = true;
             const myScript = document.createElement('script');
             myScript.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
             document.head.appendChild(myScript);
@@ -239,9 +254,8 @@ export default {
 }
 
 .clickbtn {
-    background-color: red;
-        border-radius: 5px;
     &:active {
+        border-radius: 25px;
         transform: translateY(2px);
     }
 }

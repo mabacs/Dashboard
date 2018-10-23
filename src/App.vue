@@ -67,7 +67,7 @@ export default {
 @import '@/assets/scss/_bulma-style.scss';
 
 #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
@@ -78,5 +78,9 @@ export default {
 #container {
     padding: 20px;
     margin: 0px;
+}
+
+.card {
+    border-radius: 5px;
 }
 </style>

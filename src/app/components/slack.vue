@@ -10,14 +10,14 @@
             <div class="content">
                 <div>
                     <button
-                        v-if="!connected"
+                        v-if="!connectMsg && !connectDevops && !connectReuniao"
                         class="btnConnect"
                         v-text="'Connect'"
                         @click="slackAuthRequest()"
                     >
                     </button>
                 </div>
-                <div class="slack-cont" v-if="connected">
+                <div class="slack-cont" v-if="connectMsg">
                     <div
                         v-for="(data, index) in hereData"
                         :key="index"
@@ -28,7 +28,7 @@
                     </div>
                 </div>
 
-                <div class="division" v-if="connected">
+                <div class="division" v-if="connectReuniao">
                     <div class="slack-cont">
                         <div class="slack-cont__channel">reuniões</div>
                         <div
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="division" v-if="connected">
+                <div class="division" v-if="connectDevops">
                     <div class="slack-cont">
                         <div class="slack-cont__channel">devops</div>
                         <div
@@ -66,7 +66,9 @@ import axios from 'axios';
 
 export default {
     data: () => ({
-        connected: false,
+        connectMsg: false,
+        connectReuniao: false,
+        connectDevops: false,
         hereData: [],
         reunioesData: [],
         devopsData: [],
@@ -82,19 +84,19 @@ export default {
             + 'users:read';
             if (! this.getCookie('slackToken')) {
                 const win = window.open(Authpath);
+
                 const winClosed = setInterval(() => {
                     if (win.closed) {
                         clearInterval(winClosed);
                         this.slackGetMessages();
-                        this.slackGetChannel();
-                        this.connected = true;
+                        this.slackGetReunioes();
+                        this.slackGetDevops();
                     }
                 }, 100);
             } else {
                 this.slackGetMessages();
                 this.slackGetReunioes();
                 this.slackGetDevops();
-                this.connected = true;
             }
         },
 
@@ -114,6 +116,9 @@ export default {
                     user: await this.getUser(data.messages.matches[i].user),
                 });
             }
+            if (this.hereData !== null) {
+                this.connectMsg = true;
+            }
         },
 
         async slackGetReunioes() {
@@ -129,6 +134,9 @@ export default {
                     message: (data.messages[i].text),
                     user: await this.getUser(data.messages[i].user),
                 });
+            }
+            if (this.reunioesData !== null) {
+                this.connectReuniao = true;
             }
         },
 
@@ -146,6 +154,10 @@ export default {
                     user: await this.getUser(data.messages[i].user),
                 });
             }
+
+            if (this.devopsData !== null) {
+                this.connectDevops = true;
+            }
         },
 
         async getUser(userId) {
@@ -154,8 +166,6 @@ export default {
             }&user=${userId}`;
 
             const { data } = await axios.get(pathUser);
-
-            console.log(data.user.profile.display_name);
 
             return data.user.profile.display_name;
         },

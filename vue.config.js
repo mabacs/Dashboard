@@ -5,14 +5,7 @@ module.exports = {
     configureWebpack: {
         devServer: {
             port: 8080,
-            proxy: {
-                '/api/*': {
-                    target: 'http://127.0.0.1:4392/',
-                    pathRewrite: {
-                        '^/api': '',
-                    },
-                },
-            },
+            host: 'barbatheus.dashboard.com',
         },
 
         resolve: {
