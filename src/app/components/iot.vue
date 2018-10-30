@@ -19,6 +19,7 @@
 
 <script>
 import axios from 'axios';
+// import { throttle as _throttle } from 'lodash';
 
 export default {
     data: () => ({
@@ -28,30 +29,27 @@ export default {
         luz: '',
     }),
 
-    methods: {
-
-    },
-
     mounted() {
         // lrd sensor
+
         axios.get('http://barbatheus.dashboard.com:4392/sinteg/ldr')
             .then(res => {
                 this.luz = res.data.state;
             });
 
-        // axios.get('http://barbatheus.dashboard.com:4392/sinteg/temperature')
-        //     .then(res => {
-        //         this.temperatura = res.data.state;
-        //     });
+        axios.get('http://barbatheus.dashboard.com:4392/sinteg/temperature')
+            .then(res => {
+                this.temperatura = res.data.state;
+            });
 
-        this.temperatura = '31 graus';
+        // this.temperatura = '31 graus';
 
-        // axios.get('http://barbatheus.dashboard.com:4392/sinteg/humidity')
-        //     .then(res => {
-        //         this.umidade = res.data.state;
-        //     });
+        axios.get('http://barbatheus.dashboard.com:4392/sinteg/humidity')
+            .then(res => {
+                this.umidade = res.data.state;
+            });
 
-        this.umidade = '2.6';
+        // this.umidade = '2.6';
 
         axios.get('http://barbatheus.dashboard.com:4392/sinteg/reedswitch')
             .then(res => {

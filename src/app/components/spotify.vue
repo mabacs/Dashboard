@@ -34,25 +34,30 @@
                         <div>
                             <p class="buttons player__info__btns">
                                 <a
-                                    class="button clickbtn"
+                                    class="clickbtn"
                                     @click="previousMusic()"
                                 >
                                     <span class="icon">
-                                        <i class="far fa-arrow-alt-circle-left" style="color: #fff; font-size:24px;"></i>
+                                        <i
+                                            class="far fa-arrow-alt-circle-left"
+                                            style="color: #fff; font-size:24px;"
+                                        ></i>
                                     </span>
                                 </a>
 
                                 <a
-                                    class="button clickbtn"
+                                    class="clickbtn"
                                     @click="playMusic()"
                                 >
                                     <span class="icon">
-                                        <!-- <i class="far fa-pause-circle" style="color: #fff;"></i> -->
-                                        <i :class="changeButton()" style="color: #fff; font-size:30px;"></i>
+                                        <i
+                                            :class="changeButton()"
+                                            style="color: #fff; font-size:30px;"
+                                        ></i>
                                     </span>
                                 </a>
                                 <a
-                                    class="button clickbtn"
+                                    class="clickbtn"
                                     @click="nextMusic()"
                                 >
                                     <span class="icon">
@@ -140,7 +145,7 @@ export default {
         },
 
         spotifyRequest() {
-            const win = window.open('https://accounts.spotify.com/authorize/?client_id=b35dda2c6d8844eb9ca34c7b405ef4d5&response_type=code&redirect_uri=http://barbatheus.dashboard.com:4392/spotify/token&scope=streaming%20user-read-birthdate%20user-read-private%20user-read-email');
+            const win = window.open('https://accounts.spotify.com/authorize/?client_id=f7480b16ff9c46fea5cd2d76afa655a5&response_type=code&redirect_uri=http://barbatheus.dashboard.com:4392/spotify/token&scope=streaming%20user-read-birthdate%20user-read-private%20user-read-email');
             const winClosed = setInterval(() => {
                 if (win.closed) {
                     clearInterval(winClosed);
@@ -152,7 +157,7 @@ export default {
         spotifySDKRequest() {
             window.onSpotifyWebPlaybackSDKReady = async () => {
                 this.player = new Spotify.Player({
-                    name: 'Web Playback SDK Quick Start Player',
+                    name: 'Dashboard Barbatheus',
                     getOAuthToken: cb => {
                         cb(this.getCookie('spotifyToken'));
                     },
@@ -254,6 +259,8 @@ export default {
 }
 
 .clickbtn {
+    padding-left: 10px;
+
     &:active {
         border-radius: 25px;
         transform: translateY(2px);

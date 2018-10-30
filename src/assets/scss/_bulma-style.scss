@@ -10,10 +10,14 @@ $border-radius: 5px;
 $background-grey: #404450;
 $card-grey: #222326;
 
+@import "~bulma/bulma";
+
+
+
 $button-background-color: $card-grey;
 $button-border-color: $card-grey;
 $button-hover-border-color: $card-grey;
 
 // $button-active-border-color: $background-grey;
 
-@import "~bulma/bulma";
+
