@@ -4,11 +4,15 @@ $card-color: #e8e8e8;
 $card-background-color: #222326;
 $card-header-color: #e8e8e8;
 $card-header-shadow: 0 1px 2px rgba(#fff, 0.1);
-$card-header-color: #4884c1;
+$card-header-color: #4bdcffc4;
 
 $border-radius: 5px;
 $background-grey: #404450;
 $card-grey: #222326;
+
+@import "~bulma/bulma";
+
+
 
 $button-background-color: $card-grey;
 $button-border-color: $card-grey;
@@ -16,4 +20,4 @@ $button-hover-border-color: $card-grey;
 
 // $button-active-border-color: $background-grey;
 
-@import "~bulma/bulma";
+
