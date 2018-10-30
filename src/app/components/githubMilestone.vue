@@ -18,9 +18,11 @@
             <div class="content">
                 <p style="text-align: left">Description: {{ milestoneDescription }} </p>
 
+                <p style="text-align: left">Due on: {{ milestoneDueOn }}</p>
+
                 <p style="text-align: left">Opened Issues: {{ milestoneIssuesOpened }}</p>
 
-                <p style="text-align: left">Closed Issues: {{ milestoneIssuesClosed }}</p>
+                <!-- <p style="text-align: left">Closed Issues: {{ milestoneIssuesClosed }}</p> -->
 
                 <p style="text-align: left"> Milestone Progress:
                     <progress
@@ -49,6 +51,7 @@ export default {
         milestonePath: 'https://api.github.com/repos/mabacs/Dashboard/milestones?client_id=53371ebb2de694eb8d75&client_secret=9abc87b1e2f0cc5b72e9ca22390e12e288c1a264',
         milestoneName: '',
         milestoneDescription: '',
+        milestoneDueOn: '',
         milestoneIssuesOpened: 0,
         milestoneIssuesClosed: 0,
         milestoneProgress: 0,
@@ -74,12 +77,16 @@ export default {
 
         axios.get(this.milestonePath)
             .then(res => {
-                this.milestoneName = res.data[0].title;
-                this.milestoneIssuesOpened = res.data[0].open_issues;
-                this.milestoneIssuesClosed = res.data[0].closed_issues;
+                this.milestoneName = res.data[1].title;
+                this.milestoneIssuesOpened = res.data[1].open_issues;
+                this.milestoneIssuesClosed = res.data[1].closed_issues;
                 const total = this.milestoneIssuesOpened + this.milestoneIssuesClosed;
                 this.milestoneProgress = (this.milestoneIssuesClosed / total) * 100;
-                this.milestoneDescription = res.data[0].description;
+                this.milestoneDescription = res.data[1].description;
+                const str = res.data[1].due_on;
+
+                this.milestoneDueOn = str.substring(0, str.length - 10);
+                this.milestoneDueOn = this.milestoneDueOn.split('-').reverse().join('/');
             });
     },
 };
